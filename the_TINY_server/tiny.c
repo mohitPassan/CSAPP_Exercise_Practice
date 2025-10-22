@@ -44,6 +44,7 @@ int main(int argc, char** argv)
         getnameinfo((struct sockaddr*)&clientaddr, clientlen, hostname, MAXLINE, hostport, MAXLINE, 0);
         printf("Accepted connection from (%s %s)\n", hostname, hostport);
         // Some function that does the task: 'doit()'
+        doit(connfd);
         close(connfd);
     }
 
@@ -76,7 +77,7 @@ void doit(int fd)
     is_static = parse_uri(uri, filename, cgiargs);
     if(stat(filename, &sbuf) < 0)
     {
-        clienterror(fd, filename, "404", "Not found", "Tiny couldn't file this file");
+        clienterror(fd, filename, "404", "Not found", "Tiny couldn't find this file");
         return;
     }
 
