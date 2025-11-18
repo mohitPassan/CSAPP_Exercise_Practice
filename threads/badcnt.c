@@ -5,6 +5,7 @@
 void *thread(void *vargp);
 
 volatile long cnt = 0;
+pthread_mutex_t mutex;
 
 int main(int argc, char** argv)
 {
@@ -17,6 +18,7 @@ int main(int argc, char** argv)
         exit(0);
     }
     niters = atoi(argv[1]);
+    pthread_mutex_init(&mutex, NULL);
 
     pthread_create(&tid1, NULL, thread, &niters);
     pthread_create(&tid2, NULL, thread, &niters);
@@ -35,8 +37,11 @@ void *thread(void *vargp)
 {
     long i, niters = *((long *)vargp);
 
-    for(i = 0; i<niters; i++)
+    for(i = 0; i<niters; i++) {
+         pthread_mutex_lock(&mutex);
          cnt++;
+         pthread_mutex_unlock(&mutex);
+    }
 
     return NULL;
 }
